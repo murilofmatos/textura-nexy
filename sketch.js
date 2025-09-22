@@ -1,56 +1,66 @@
 let offset = 0;
-let speed = 2;
+let speed = 0.3;
+let baseDash = 30;
+let baseGap = 60;
+let variation = 0.8;
+let scale = 0.5;
 let patternCache = {};
 let c1, c2, c3;
 
 // coordenadas aproximadas dos vértices
 let points = [];
+let logos = [];
 
 function setup() {
   createCanvas(600, 600);
-  strokeWeight(4);
+  strokeWeight(1);
 
   // cores do gradiente
-  c1 = color(255, 0, 0);
-  c2 = color(0, 255, 0);
-  c3 = color(0, 0, 255);
+  c1 = color(33, 150, 243);
+  c2 = color(33, 45, 243);
+  c3 = color(126, 33, 243);
 
   // Definir os pontos do símbolo baseado na imagem
-  points = [
+createNexyLogoShape(10, 10);
+createNexyLogoShape(110, 172.5);
+createNexyLogoShape(230, -2.5);
+createNexyLogoShape(330, 160);
+}
+
+function createNexyLogoShape(x, y){
+  logos.push([
     // Triângulo inferior esquerdo
-    createVector(100, 400),
-    createVector(250, 400),
-    createVector(100, 550),
-    createVector(100, 400),
+    createVector(x, y+(200 * scale)),
+    createVector(x+(170 * scale), y+(300 * scale)),
+    createVector(x, y+(400 * scale)),
+    createVector(x, y+(200 * scale)),
 
     // Triângulo superior direito
-    createVector(350, 150),
-    createVector(500, 150),
-    createVector(500, 300),
-    createVector(350, 150),
+    createVector(x+(230 * scale), y+(100 * scale)),
+    createVector(x+(400 * scale), y),
+    createVector(x+(400 * scale), y+(200 * scale)),
+    createVector(x+(230 * scale), y+(100 * scale)),
 
     // Barra diagonal
-    createVector(120, 420),
-    createVector(480, 180)
-  ];
+    createVector(x, y+(150 * scale)),
+    createVector(x, y),
+    createVector(x+(400 * scale), y+(250 * scale)),
+    createVector(x+(400 * scale), y+(400 * scale)),
+    createVector(x, y+(150 * scale)),
+  ])
+}
+
+function drawShape(){
+  logos.forEach((logo)=>{
+    logo.forEach((point, i)=>{
+      if(i< logo.length - 1 && i !== 3 && i !== 7) dashedLine(logo[i].x, logo[i].y, logo[i+1].x, logo[i+1].y, baseDash, baseGap, variation, c1, c2, c3, offset);
+    })
+  })
 }
 
 function draw() {
   background(240);
-
-  // Triângulo inferior esquerdo
-  dashedLine(points[0].x, points[0].y, points[1].x, points[1].y, 12, 6, 0.4, c1, c2, c3, offset);
-  dashedLine(points[1].x, points[1].y, points[2].x, points[2].y, 12, 6, 0.4, c1, c2, c3, offset);
-  dashedLine(points[2].x, points[2].y, points[3].x, points[3].y, 12, 6, 0.4, c1, c2, c3, offset);
-
-  // Triângulo superior direito
-  dashedLine(points[4].x, points[4].y, points[5].x, points[5].y, 12, 6, 0.4, c1, c2, c3, offset);
-  dashedLine(points[5].x, points[5].y, points[6].x, points[6].y, 12, 6, 0.4, c1, c2, c3, offset);
-  dashedLine(points[6].x, points[6].y, points[7].x, points[7].y, 12, 6, 0.4, c1, c2, c3, offset);
-
-  // Barra diagonal
-  dashedLine(points[8].x, points[8].y, points[9].x, points[9].y, 12, 6, 0.4, c1, c2, c3, offset);
-
+  drawShape();
   offset += speed;
 }
 
