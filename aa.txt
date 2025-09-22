@@ -1,4 +1,0 @@
-// Cores do gradiente
-  c1 = color(33, 150, 243);
-  c2 = color(33, 45, 243);
-  c3 = color(126, 33, 243);
